@@ -2,26 +2,7 @@ import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const projects = [
-  {
-    title: "Traffic Optimizer App",
-    desc: "Smart route optimization with real-time accident alert integration for safer, faster commutes.",
-    stack: ["Python", "APIs", "Algorithms"],
-    repo: "https://github.com/akshitsingh/traffic-optimizer",
-  },
-  {
-    title: "3D Knowledge Graph Builder",
-    desc: "Interactive skill visualization platform using GitHub and Notion APIs for immersive learning maps.",
-    stack: ["React", "Three.js", "APIs"],
-    repo: "https://github.com/akshitsingh/knowledge-graph",
-  },
-  {
-    title: "AI YouTube Automation",
-    desc: "Automated faceless content creation platform powered by AI for scalable YouTube channel management.",
-    stack: ["Python", "AI/ML", "Automation"],
-    repo: "https://github.com/akshitsingh/youtube-automation",
-  },
-];
+import { projects } from "@/data/portfolio";
 
 const ProjectsSection = () => (
   <section id="projects" className="py-24">

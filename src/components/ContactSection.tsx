@@ -6,20 +6,48 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 
-const socials = [
-  { icon: Mail, label: "Email", href: "mailto:akshitsingh.vg@gmail.com", text: "akshitsingh.vg@gmail.com" },
-  { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com/in/akshitsingh007", text: "linkedin.com/in/akshitsingh007" },
-  { icon: Github, label: "GitHub", href: "https://github.com/Akshitsingh070", text: "github.com/Akshitsingh070" },
-];
+import { socialLinks as socials } from "@/data/portfolio";
 
 const ContactSection = () => {
   const { toast } = useToast();
   const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({ title: "Message sent!", description: "Thank you for reaching out. I'll get back to you soon." });
-    setForm({ name: "", email: "", message: "" });
+    setSubmitting(true);
+    
+    try {
+      const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+      if (!accessKey) {
+        toast({ title: "Error", description: "Web3Forms access key is missing. Please set VITE_WEB3FORMS_ACCESS_KEY.", variant: "destructive" });
+        return;
+      }
+      
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          access_key: accessKey,
+          ...form
+        })
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        toast({ title: "Message sent!", description: "Thank you for reaching out. I'll get back to you soon." });
+        setForm({ name: "", email: "", message: "" });
+      } else {
+        toast({ title: "Failed to send message", description: data.message, variant: "destructive" });
+      }
+    } catch (err) {
+      toast({ title: "Error", description: "Something went wrong. Please try again.", variant: "destructive" });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -85,8 +113,8 @@ const ContactSection = () => {
               required
               className="bg-secondary/50 border-border resize-none"
             />
-            <Button type="submit" className="w-full rounded-full font-heading">
-              <Send className="mr-2 h-4 w-4" />Send Message
+            <Button type="submit" disabled={submitting} className="w-full rounded-full font-heading">
+              <Send className="mr-2 h-4 w-4" />{submitting ? "Sending..." : "Send Message"}
             </Button>
           </motion.form>
         </div>

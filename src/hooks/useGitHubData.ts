@@ -29,7 +29,10 @@ export const useGitHubProfile = () => {
 
   useEffect(() => {
     fetch(`https://api.github.com/users/${GITHUB_USERNAME}`)
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error("Rate limit or fetch error");
+        return r.json();
+      })
       .then(setProfile)
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -44,7 +47,10 @@ export const useGitHubRepos = () => {
 
   useEffect(() => {
     fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=10`)
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error("Rate limit or fetch error");
+        return r.json();
+      })
       .then((data) => setRepos(Array.isArray(data) ? data : []))
       .catch(console.error)
       .finally(() => setLoading(false));

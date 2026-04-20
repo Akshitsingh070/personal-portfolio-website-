@@ -1,23 +1,6 @@
 import { motion } from "framer-motion";
 
-const categories = [
-  {
-    title: "Languages",
-    skills: ["Java", "JavaScript", "HTML", "CSS"],
-  },
-  {
-    title: "Frameworks",
-    skills: ["MongoDB", "Express.js", "React", "Node.js"],
-  },
-  {
-    title: "Tools",
-    skills: ["Git", "Cloud", "AI Tools"],
-  },
-  {
-    title: "Concepts",
-    skills: ["DSA", "Web Development", "System Design"],
-  },
-];
+import { skillsCategories as categories } from "@/data/portfolio";
 
 const SkillsSection = () => (
   <section id="skills" className="py-24 bg-secondary/50">
